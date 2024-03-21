@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\EwsDeviceRepositoryInterface;
 use App\Models\EwsDevice;
+use App\Models\EwsDeviceAddress;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
@@ -22,6 +23,13 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         $ewsDevice->type = $data['type'];
         $ewsDevice->save();
 
+        for ($i = 0; $i < count($data['addresses']); $i++) {
+            $ewsDeviceAddress = new EwsDeviceAddress();
+            $ewsDeviceAddress->ews_device_id = $ewsDevice->id;
+            $ewsDeviceAddress->address = $data['addresses'][$i]['address'];
+            $ewsDeviceAddress->save();
+        }
+
         return $ewsDevice;
     }
 
@@ -39,6 +47,14 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         $ewsDevice->name = $data['name'];
         $ewsDevice->type = $data['type'];
         $ewsDevice->save();
+
+        $ewsDevice->addresses()->delete();
+        for ($i = 0; $i < count($data['addresses']); $i++) {
+            $ewsDeviceAddress = new EwsDeviceAddress();
+            $ewsDeviceAddress->ews_device_id = $ewsDevice->id;
+            $ewsDeviceAddress->address = $data['addresses'][$i]['address'];
+            $ewsDeviceAddress->save();
+        }
 
         return $ewsDevice;
     }

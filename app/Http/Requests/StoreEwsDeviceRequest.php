@@ -17,6 +17,15 @@ class StoreEwsDeviceRequest extends FormRequest
             'code' => 'required|string|max:255|unique:ews_devices',
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
+            'addresses' => 'array',
+            'addresses.*.address' => 'required|string|max:255',
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        if (! $this->has('addresses')) {
+            $this->merge(['addresses' => []]);
+        }
     }
 }
