@@ -40,6 +40,13 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         return $ewsDevice;
     }
 
+    public function getEwsDeviceByDeviceCode(string $code)
+    {
+        $ewsDevice = EwsDevice::where('code', $code)->first();
+
+        return $ewsDevice;
+    }
+
     public function update(array $data, string $id)
     {
         $ewsDevice = EwsDevice::find($id);

@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('validate.api.key')->group(function () {
     Route::get('ews-devices', [EwsDeviceController::class, 'index']);
     Route::get('ews-device-measurements', [EwsDeviceController::class, 'index']);
+    Route::get('ews-device-measurements/chart', [EwsDeviceController::class, 'chart']);
 
     Route::post('ews-device', [EwsDeviceController::class, 'store']);
     Route::get('ews-device/{id}', [EwsDeviceController::class, 'show']);
