@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEwsDeviceMeasurementRequest;
 use App\Http\Requests\UpdateEwsDeviceMeasurementRequest;
 use App\Http\Resources\EwsDeviceMeasurementResource;
 use App\Interfaces\EwsDeviceMeasurementRepositoryInterface;
+use App\Models\EwsDevice;
 use Illuminate\Http\Request;
 
 class EwsDeviceMeasurementController extends Controller
@@ -35,6 +36,8 @@ class EwsDeviceMeasurementController extends Controller
         $request = $request->validated();
 
         try {
+            $request['ews_device_id'] = EwsDevice::where('code', '=', $request['device_code'])->first()->id;
+
             $ewsDeviceMeasurement = $this->EwsDeviceMeasurementRepository->create($request);
 
             return ResponseHelper::jsonResponse(true, 'Data pengukuran ews berhasil ditambahkan.', new EwsDeviceMeasurementResource($ewsDeviceMeasurement), 201);
@@ -63,6 +66,8 @@ class EwsDeviceMeasurementController extends Controller
         $request = $request->validated();
 
         try {
+            $request['ews_device_id'] = EwsDevice::where('code', '=', $request['device_code'])->first()->id;
+
             $ewsDeviceMeasurement = $this->EwsDeviceMeasurementRepository->update($request, $id);
 
             return ResponseHelper::jsonResponse(true, 'Data pengukuran ews berhasil diubah.', new EwsDeviceMeasurementResource($ewsDeviceMeasurement), 200);
