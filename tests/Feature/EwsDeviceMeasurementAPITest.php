@@ -43,18 +43,19 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
+        EwsDevice::factory()
             ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
             ->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
-            ->for($ewsDevice, 'device')
-            ->make()
+            ->make(['device_code' => EwsDevice::inRandomOrder()->first()->code])
             ->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device-measurement', $ewsDeviceMeasurement);
 
         $response->assertSuccessful();
+
+        unset($ewsDeviceMeasurement['device_code']);
 
         $this->assertDatabaseHas('ews_device_measurements', $ewsDeviceMeasurement);
     }
@@ -93,12 +94,15 @@ class EwsDeviceMeasurementAPITest extends TestCase
             ->create();
 
         $updatedEwsDeviceMeasurement = EwsDeviceMeasurement::factory()
-            ->for($ewsDevice, 'device')
-            ->make()->toArray();
+            ->make(['device_code' => EwsDevice::inRandomOrder()->first()->code])
+            ->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device-measurement/'.$ewsDeviceMeasurement->id, $updatedEwsDeviceMeasurement);
 
         $response->assertSuccessful();
+
+        $updatedEwsDeviceMeasurement['ews_device_id'] = $response['data']['ews_device']['id'];
+        unset($updatedEwsDeviceMeasurement['device_code']);
 
         $this->assertDatabaseHas('ews_device_measurements', $updatedEwsDeviceMeasurement);
     }
@@ -120,6 +124,8 @@ class EwsDeviceMeasurementAPITest extends TestCase
         $response = $this->json('DELETE', '/api/v1/ews-device-measurement/'.$ewsDeviceMeasurement->id);
 
         $response->assertSuccessful();
+
+        unset($ewsDeviceMeasurement['device_code']);
 
         $this->assertSoftDeleted('ews_device_measurements', $ewsDeviceMeasurement->toArray());
     }

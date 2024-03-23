@@ -14,7 +14,7 @@ class UpdateEwsDeviceMeasurementRequest extends FormRequest
     public function rules()
     {
         return [
-            'ews_device_id' => ['required', 'exists:ews_devices,id'],
+            'device_code' => ['required', 'string', 'exists:ews_devices,code'],
             'vibration_value' => ['required', 'numeric'],
             'db_value' => ['required', 'numeric'],
         ];
