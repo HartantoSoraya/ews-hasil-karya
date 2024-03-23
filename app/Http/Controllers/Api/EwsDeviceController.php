@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEwsDeviceRequest;
 use App\Http\Requests\UpdateEwsDeviceRequest;
 use App\Http\Resources\EwsDeviceResource;
 use App\Interfaces\EwsDeviceRepositoryInterface;
+use App\Models\EwsDeviceMeasurement;
 use Illuminate\Http\Request;
 
 class EwsDeviceController extends Controller
@@ -100,24 +101,25 @@ class EwsDeviceController extends Controller
         }
     }
 
-
     public function chart(Request $request)
-{
-    try {
-        $data = $this->EwsDeviceRepository->getEwsDeviceByDeviceCode($request->code);
+    {
+        try {
+            $device = $this->EwsDeviceRepository->getEwsDeviceByDeviceCode($request->code);
 
-        $chartData = $data->measurements->sortByDesc('created_at')->map(function ($item) {
-            return [
-                'vibration_value' => $item->vibration_value,
-                'db_value' => $item->db_value,
-                'time' => $item->created_at->format('Y-m-d H:i:s'),
-            ];
-        });
 
-        return ResponseHelper::jsonResponse(true, 'Success', $chartData, 200);
-    } catch (\Exception $e) {
-        return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+            $measurements = EwsDeviceMeasurement::where('ews_device_id', $device->id)->get();
+
+            $chartData = $measurements->map(function ($item) {
+                return [
+                    'vibration_value' => $item->vibration_value,
+                    'db_value' => $item->db_value,
+                    'time' => $item->created_at->format('Y-m-d H:i:s'),
+                ];
+            });
+
+            return ResponseHelper::jsonResponse(true, 'Success', $chartData, 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
-}
-
 }
