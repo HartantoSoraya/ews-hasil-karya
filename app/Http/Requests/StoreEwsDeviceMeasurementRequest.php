@@ -15,7 +15,8 @@ class StoreEwsDeviceMeasurementRequest extends FormRequest
     {
         return [
             'ews_device_id' => ['required', 'exists:ews_devices,id'],
-            'value' => ['required', 'numeric'],
+            'vibration_value' => ['required', 'numeric'],
+            'db_value' => ['required', 'numeric'],
         ];
     }
 }

@@ -14,7 +14,8 @@ class EwsDeviceMeasurementFactory extends Factory
     public function definition(): array
     {
         return [
-            'value' => $this->faker->randomFloat(2, 0, 100),
+            'vibration_value' => $this->faker->randomFloat(2, 0, 100),
+            'db_value' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
 }
