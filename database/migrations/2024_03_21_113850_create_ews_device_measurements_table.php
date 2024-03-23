@@ -16,7 +16,8 @@ return new class extends Migration
 
             $table->uuid('ews_device_id');
             $table->foreign('ews_device_id')->references('id')->on('ews_devices');
-            $table->decimal('value', 30, 8)->default(0);
+            $table->decimal('vibration_value', 30, 8)->default(0);
+            $table->decimal('db_value', 30, 8)->default(0);
 
             $table->softDeletes();
             $table->timestamps();

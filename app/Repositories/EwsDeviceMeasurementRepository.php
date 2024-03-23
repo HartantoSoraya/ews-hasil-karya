@@ -18,7 +18,8 @@ class EwsDeviceMeasurementRepository implements EwsDeviceMeasurementRepositoryIn
     {
         $ewsDeviceMeasurement = new EwsDeviceMeasurement();
         $ewsDeviceMeasurement->ews_device_id = $data['ews_device_id'];
-        $ewsDeviceMeasurement->value = $data['value'];
+        $ewsDeviceMeasurement->vibration_value = $data['vibration_value'];
+        $ewsDeviceMeasurement->db_value = $data['db_value'];
         $ewsDeviceMeasurement->save();
 
         return $ewsDeviceMeasurement;
@@ -35,7 +36,8 @@ class EwsDeviceMeasurementRepository implements EwsDeviceMeasurementRepositoryIn
     {
         $ewsDeviceMeasurement = EwsDeviceMeasurement::find($id);
         $ewsDeviceMeasurement->ews_device_id = $data['ews_device_id'];
-        $ewsDeviceMeasurement->value = $data['value'];
+        $ewsDeviceMeasurement->vibration_value = $data['vibration_value'];
+        $ewsDeviceMeasurement->db_value = $data['db_value'];
         $ewsDeviceMeasurement->save();
 
         return $ewsDeviceMeasurement;
