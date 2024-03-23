@@ -31,9 +31,9 @@ class EwsDeviceMeasurementController extends Controller
         }
     }
 
-    public function store(StoreEwsDeviceMeasurementRequest $request)
+    public function store(Request $request)
     {
-        $request = $request->validated();
+        $request = $request->all();
 
         try {
             $request['ews_device_id'] = EwsDevice::where('code', '=', $request['device_code'])->first()->id;
