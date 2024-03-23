@@ -51,7 +51,7 @@ class EwsDeviceMeasurementController extends Controller
         try {
             $ewsDeviceMeasurement = $this->EwsDeviceMeasurementRepository->getEwsDeviceMeasurementById($id);
 
-            if (! $ewsDeviceMeasurement) {
+            if (!$ewsDeviceMeasurement) {
                 return ResponseHelper::jsonResponse(false, 'Data pengukuran ews tidak ditemukan.', null, 404);
             }
 
