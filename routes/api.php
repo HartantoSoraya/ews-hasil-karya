@@ -28,7 +28,7 @@ Route::get('ews-device/{id}', [EwsDeviceController::class, 'show']);
 Route::post('ews-device/{id}', [EwsDeviceController::class, 'update']);
 Route::delete('ews-device/{id}', [EwsDeviceController::class, 'destroy']);
 
-Route::post('ews-device-measurement', [EwsDeviceMeasurementController::class, 'store']);
+Route::get('ews-device-measurement', [EwsDeviceMeasurementController::class, 'store']);
 Route::get('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'show']);
 Route::post('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'update']);
 Route::delete('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'destroy']);
