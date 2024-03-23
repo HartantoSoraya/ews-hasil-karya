@@ -109,7 +109,7 @@ class EwsDeviceController extends Controller
                 return [
                     'vibration_value' => $item->vibration_value,
                     'db_value' => $item->db_value,
-                    'time' => $item->created_at->format('H:i:s')->toTimeString(),
+                    'time' => $item->created_at->format('Y-m-d H:i:s'),
                 ];
             });
 
