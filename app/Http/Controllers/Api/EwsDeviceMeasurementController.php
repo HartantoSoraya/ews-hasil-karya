@@ -36,6 +36,8 @@ class EwsDeviceMeasurementController extends Controller
     {
         $request = $request->all();
 
+        Log::info($request);
+
         try {
             $request['ews_device_id'] = EwsDevice::where('code', '=', $request['device_code'])->first()->id;
 
