@@ -14,7 +14,7 @@ class EwsDeviceMeasurement extends Model
     protected $fillable = [
         'ews_device_id',
         'vibration_value',
-        'db_value'
+        'db_value',
     ];
 
     public function device()

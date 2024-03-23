@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\EwsDevice;
 use App\Models\EwsDeviceAddress;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EwsDeviceSeeder extends Seeder
