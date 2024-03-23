@@ -10,6 +10,7 @@ use App\Http\Resources\EwsDeviceMeasurementResource;
 use App\Interfaces\EwsDeviceMeasurementRepositoryInterface;
 use App\Models\EwsDevice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EwsDeviceMeasurementController extends Controller
 {
@@ -40,8 +41,13 @@ class EwsDeviceMeasurementController extends Controller
 
             $ewsDeviceMeasurement = $this->EwsDeviceMeasurementRepository->create($request);
 
+            Log::info('Data pengukuran ews berhasil ditambahkan.', ['data' => $ewsDeviceMeasurement]);
+
             return ResponseHelper::jsonResponse(true, 'Data pengukuran ews berhasil ditambahkan.', new EwsDeviceMeasurementResource($ewsDeviceMeasurement), 201);
         } catch (\Exception $e) {
+
+            Log::error('Data pengukuran ews gagal ditambahkan.', ['error' => $e->getMessage()]);
+
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
