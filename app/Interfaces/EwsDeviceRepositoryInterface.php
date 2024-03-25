@@ -10,6 +10,8 @@ interface EwsDeviceRepositoryInterface
 
     public function getEwsDeviceById(string $id);
 
+    public function getEwsDeviceByDeviceCode(string $code);
+
     public function update(array $data, string $id);
 
     public function delete(string $id);
