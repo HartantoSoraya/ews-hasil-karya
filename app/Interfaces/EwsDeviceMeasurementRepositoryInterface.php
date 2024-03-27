@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface EwsDeviceMeasurementRepositoryInterface
 {
-    public function getAllEwsDeviceMeasurements();
+    public function getAllEwsDeviceMeasurements($ews_device_id = null, $start_date = null, $end_date = null);
 
     public function create(array $data);
 

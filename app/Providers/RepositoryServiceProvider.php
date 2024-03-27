@@ -13,8 +13,10 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
         $this->app->bind(\App\Interfaces\EwsDeviceRepositoryInterface::class, \App\Repositories\EwsDeviceRepository::class);
         $this->app->bind(\App\Interfaces\EwsDeviceMeasurementRepositoryInterface::class, \App\Repositories\EwsDeviceMeasurementRepository::class);
+        $this->app->bind(\App\Interfaces\ClientRepositoryInterface::class, \App\Repositories\ClientRepository::class);
     }
 
     /**

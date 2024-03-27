@@ -23,9 +23,9 @@ class EwsDeviceController extends Controller
     public function index(Request $request)
     {
         try {
-            $ewsDevices = $this->EwsDeviceRepository->getAllEwsDevices($request->all());
+            $client_id = $request->input('client_id');
 
-            $anu = EwsDeviceResource::collection($ewsDevices);
+            $ewsDevices = $this->EwsDeviceRepository->getAllEwsDevices($client_id);
 
             return ResponseHelper::jsonResponse(true, 'Success', EwsDeviceResource::collection($ewsDevices), 200);
         } catch (\Exception $e) {
@@ -102,30 +102,30 @@ class EwsDeviceController extends Controller
     }
 
     public function chart(Request $request)
-{
-    try {
-        $device = $this->EwsDeviceRepository->getEwsDeviceByDeviceCode($request->code);
+    {
+        try {
+            $device = $this->EwsDeviceRepository->getEwsDeviceByDeviceCode($request->code);
 
-        $latestMeasurement = EwsDeviceMeasurement::where('ews_device_id', $device->id)
-            ->latest('created_at')
-            ->first();
+            $latestMeasurement = EwsDeviceMeasurement::where('ews_device_id', $device->id)
+                ->latest('created_at')
+                ->first();
 
-        // Return the latest measurement
-        if ($latestMeasurement) {
-            $chartData = [
-                [
-                    'vibration_value' => $latestMeasurement->vibration_value,
-                    'db_value' => $latestMeasurement->db_value,
-                    'time' => $latestMeasurement->created_at->format('Y-m-d H:i:s'),
-                ]
-            ];
-            return ResponseHelper::jsonResponse(true, 'Success', $chartData, 200);
-        } else {
-            return ResponseHelper::jsonResponse(true, 'No measurements found', [], 200);
+            // Return the latest measurement
+            if ($latestMeasurement) {
+                $chartData = [
+                    [
+                        'vibration_value' => $latestMeasurement->vibration_value,
+                        'db_value' => $latestMeasurement->db_value,
+                        'time' => $latestMeasurement->created_at->format('Y-m-d H:i:s'),
+                    ],
+                ];
+
+                return ResponseHelper::jsonResponse(true, 'Success', $chartData, 200);
+            } else {
+                return ResponseHelper::jsonResponse(true, 'No measurements found', [], 200);
+            }
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
-    } catch (\Exception $e) {
-        return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
     }
-}
-
 }

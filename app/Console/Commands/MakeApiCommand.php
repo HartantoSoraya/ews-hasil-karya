@@ -155,6 +155,62 @@ class MakeApiCommand extends Command
         $controllerContent .= "    }\n";
         $controllerContent .= "}\n";
 
+        $controllerContent =
+            <<<'EOT'
+            <?php
+
+            namespace App\Http\Controllers\Api;
+
+            use App\Http\Controllers\Controller;
+            use App\Http\Requests\Store__namePascalCase__Request;
+            use App\Http\Requests\Update__namePascalCase__Request;
+            use App\Http\Resources\__namePascalCase__Resource;
+            use App\Interfaces\__namePascalCase__RepositoryInterface;
+            use Illuminate\Http\Request;
+            use App\Helpers\ResponseHelper;
+
+            class __namePascalCase__Controller extends Controller
+            {
+                protected $__nameCamelCase__Repository;
+
+                public function __construct(__namePascalCase__RepositoryInterface $__nameCamelCase__Repository)
+                {
+                    $this->__nameCamelCase__Repository = $__nameCamelCase__Repository;
+                }
+
+                public function index(Request $request)
+                {
+                    //add your code here
+                }
+
+                public function store(Store__namePascalCase__Request $request)
+                {
+                    //add your code here
+                }
+
+                public function show($id)
+                {
+                    //add your code here
+                }
+
+                public function update(Update__namePascalCase__Request $request, $id)
+                {
+                    //add your code here
+                }
+
+                public function destroy($id)
+                {
+                    //add your code here
+                }
+            }
+            EOT;
+
+        $controllerContent = str_replace('__namePascalCase__', $name, $controllerContent);
+        $controllerContent = str_replace('__nameCamelCase__', Str::camel($name), $controllerContent);
+        $controllerContent = str_replace('__nameSnakeCase__', Str::snake($name), $controllerContent);
+        $controllerContent = str_replace('__nameProperCase__', ucfirst(strtolower(preg_replace('/(?<=\\w)(?=[A-Z])/', ' ', $name))), $controllerContent);
+        $controllerContent = str_replace('__nameKebabCase__', Str::kebab($name), $controllerContent);
+        $controllerContent = str_replace('__nameCamelCasePlurals__', Str::camel(Str::plural($name)), $controllerContent);
         file_put_contents($controllerPath, $controllerContent);
     }
 
@@ -226,14 +282,173 @@ class MakeApiCommand extends Command
     protected function modifyRepository()
     {
         $name = $this->argument('name');
+
+        if (! file_exists(app_path('Interfaces'))) {
+            mkdir(app_path('Interfaces'), 0777, true);
+        }
+        if (! file_exists(app_path('Repositories'))) {
+            mkdir(app_path('Repositories'), 0777, true);
+        }
+
         $interfacePath = app_path("Interfaces/{$name}RepositoryInterface.php");
         $repositoryPath = app_path("Repositories/{$name}Repository.php");
 
         $interfaceContent = "<?php\n\nnamespace App\Interfaces;\n\ninterface {$name}RepositoryInterface\n{\n    //\n}\n";
+
+        $interfaceContent =
+            <<<'EOT'
+            <?php
+
+            namespace App\Interfaces;
+            
+            interface __nameCamelCase__RepositoryInterface
+            {
+                public function getAll__namePascalCasePlurals__();
+            
+                public function get__namePascalCase__ById(string $id);
+            
+                public function create__namePascalCase__(array $data);
+            
+                public function update__namePascalCase__(array $data, string $id);
+            
+                public function delete__namePascalCase__(string $id);
+            }            
+            EOT;
+
+        $interfaceContent = str_replace('__namePascalCase__', $name, $interfaceContent);
+        $interfaceContent = str_replace('__namePascalCasePlurals__', Str::studly(Str::plural($name)), $interfaceContent);
+        $interfaceContent = str_replace('__nameCamelCase__', Str::camel($name), $interfaceContent);
+        $interfaceContent = str_replace('__nameSnakeCase__', Str::snake($name), $interfaceContent);
+        $interfaceContent = str_replace('__nameProperCase__', ucfirst(strtolower(preg_replace('/(?<=\\w)(?=[A-Z])/', ' ', $name))), $interfaceContent);
+        $interfaceContent = str_replace('__nameKebabCase__', Str::kebab($name), $interfaceContent);
+        $interfaceContent = str_replace('__nameCamelCasePlurals__', Str::camel(Str::plural($name)), $interfaceContent);
+
         $repositoryContent = "<?php\n\nnamespace App\Repositories;\n\nuse App\Interfaces\\{$name}RepositoryInterface;\n\nclass {$name}Repository implements {$name}RepositoryInterface\n{\n    //\n}\n";
+
+        $repositoryContent =
+            <<<'EOT'
+            <?php
+
+            namespace App\Repositories;
+            
+            use App\Interfaces\__namePascalCase__RepositoryInterface;
+            use App\Models\__namePascalCase__;
+            use Illuminate\Support\Facades\DB;
+            
+            class __namePascalCase__Repository implements __namePascalCase__RepositoryInterface
+            {
+                public function getAll__namePascalCasePlurals__()
+                {
+                    return __namePascalCase__::all();
+                }
+            
+                public function get__namePascalCase__ById(string $id)
+                {
+                    return __namePascalCase__::findOrFail($id);
+                }
+            
+                public function create__namePascalCase__(array $data)
+                {
+                    DB::beginTransaction();
+                    
+                    try {
+                        $__nameCamelCase__ = __namePascalCase__::create($data);
+            
+                        DB::commit();
+            
+                        return $__nameCamelCase__;
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+            
+                        return $e->getMessage();
+                    }
+                }
+            
+                public function update__namePascalCase__(array $data, string $id)
+                {
+                    DB::beginTransaction();
+            
+                    try {
+                        $__nameCamelCase__ = __namePascalCase__::findOrFail($id);
+            
+                        $__nameCamelCase__->update($data);
+            
+                        DB::commit();
+            
+                        return $__nameCamelCase__;
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+            
+                        return $e->getMessage();
+                    }
+                }
+            
+                public function delete__namePascalCase__(string $id)
+                {
+                    DB::beginTransaction();
+            
+                    try {
+                        __namePascalCase__::findOrFail($id)->delete();
+            
+                        DB::commit();
+            
+                        return true;
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+            
+                        return $e->getMessage();
+                    }
+                }
+            }        
+            EOT;
+
+        $repositoryContent = str_replace('__namePascalCase__', $name, $repositoryContent);
+        $repositoryContent = str_replace('__namePascalCasePlurals__', Str::studly(Str::plural($name)), $repositoryContent);
+        $repositoryContent = str_replace('__nameCamelCase__', Str::camel($name), $repositoryContent);
+        $repositoryContent = str_replace('__nameSnakeCase__', Str::snake($name), $repositoryContent);
+        $repositoryContent = str_replace('__nameProperCase__', ucfirst(strtolower(preg_replace('/(?<=\\w)(?=[A-Z])/', ' ', $name))), $repositoryContent);
+        $repositoryContent = str_replace('__nameKebabCase__', Str::kebab($name), $repositoryContent);
+        $repositoryContent = str_replace('__nameCamelCasePlurals__', Str::camel(Str::plural($name)), $repositoryContent);
 
         file_put_contents($interfacePath, $interfaceContent);
         file_put_contents($repositoryPath, $repositoryContent);
+
+        if (! file_exists(app_path('Providers/RepositoryServiceProvider.php'))) {
+            touch(app_path('Providers/RepositoryServiceProvider.php'));
+
+            $repositoryServiceProviderContent =
+                <<<'EOT'
+                <?php
+
+                namespace App\Providers;
+
+                use Illuminate\Support\ServiceProvider;
+
+                class RepositoryServiceProvider extends ServiceProvider
+                {
+                    /**
+                     * Register services.
+                     *
+                     * @return void
+                     */
+                    public function register()
+                    {
+
+                    }
+
+                    /**
+                     * Bootstrap services.
+                     *
+                     * @return void
+                     */
+                    public function boot()
+                    {
+                        //
+                    }
+                }
+                EOT;
+            file_put_contents(app_path('Providers/RepositoryServiceProvider.php'), $repositoryServiceProviderContent);
+        }
 
         $repositoryServiceProvider = app_path('Providers/RepositoryServiceProvider.php');
         $repositoryServiceProviderContent = file_get_contents($repositoryServiceProvider);
