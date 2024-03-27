@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Enum\UserRoleEnum;
 use App\Models\EwsDevice;
 use App\Models\EwsDeviceAddress;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class EwsDeviceAPITest extends TestCase
@@ -19,7 +22,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_call_index_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -34,7 +39,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_call_create_with_auto_code_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -54,7 +61,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_api_call_show_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -69,7 +78,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_api_call_update_with_auto_code_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -93,7 +104,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_api_call_update_with_existing_code_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -115,7 +128,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_api_update_with_existing_code_in_different_ews_device_expect_failed()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -139,7 +154,9 @@ class EwsDeviceAPITest extends TestCase
 
     public function test_ews_device_api_call_delete_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -151,6 +168,9 @@ class EwsDeviceAPITest extends TestCase
 
         $response->assertSuccessful();
 
-        $this->assertSoftDeleted('ews_devices', $ewsDevice->toArray());
+        $ewsDevice = $ewsDevice->toArray();
+        $ewsDevice = Arr::except($ewsDevice, ['created_at', 'updated_at', 'deleted_at']);
+
+        $this->assertSoftDeleted('ews_devices', $ewsDevice);
     }
 }

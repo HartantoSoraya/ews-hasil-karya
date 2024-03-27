@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEwsDeviceMeasurementRequest;
 use App\Http\Requests\UpdateEwsDeviceMeasurementRequest;
 use App\Http\Resources\EwsDeviceMeasurementResource;
 use App\Interfaces\EwsDeviceMeasurementRepositoryInterface;
@@ -24,7 +23,15 @@ class EwsDeviceMeasurementController extends Controller
     public function index(Request $request)
     {
         try {
-            $ewsDeviceMeasurements = $this->EwsDeviceMeasurementRepository->getAllEwsDeviceMeasurements();
+            $ews_device_id = $request->input('ews_device_id');
+            $start_date = $request->input('start_date');
+            $end_date = $request->input('end_date');
+
+            $ewsDeviceMeasurements = $this->EwsDeviceMeasurementRepository->getAllEwsDeviceMeasurements(
+                $ews_device_id,
+                $start_date,
+                $end_date
+            );
 
             return ResponseHelper::jsonResponse(true, 'Success', EwsDeviceMeasurementResource::collection($ewsDeviceMeasurements), 200);
         } catch (\Exception $e) {
@@ -55,7 +62,7 @@ class EwsDeviceMeasurementController extends Controller
         try {
             $ewsDeviceMeasurement = $this->EwsDeviceMeasurementRepository->getEwsDeviceMeasurementById($id);
 
-            if (!$ewsDeviceMeasurement) {
+            if (! $ewsDeviceMeasurement) {
                 return ResponseHelper::jsonResponse(false, 'Data pengukuran ews tidak ditemukan.', null, 404);
             }
 

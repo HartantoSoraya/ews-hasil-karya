@@ -7,9 +7,23 @@ use App\Models\EwsDeviceMeasurement;
 
 class EwsDeviceMeasurementRepository implements EwsDeviceMeasurementRepositoryInterface
 {
-    public function getAllEwsDeviceMeasurements()
+    public function getAllEwsDeviceMeasurements($ews_device_id = null, $start_date = null, $end_date = null)
     {
-        $ewsDeviceMeasurements = EwsDeviceMeasurement::orderBy('created_at', 'desc')->get();
+        $ewsDeviceMeasurements = EwsDeviceMeasurement::orderBy('created_at', 'desc');
+
+        if ($ews_device_id !== null) {
+            $ewsDeviceMeasurements->where('ews_device_id', $ews_device_id);
+        }
+
+        if ($start_date !== null) {
+            $ewsDeviceMeasurements->whereDate('created_at', '>=', $start_date);
+        }
+
+        if ($end_date !== null) {
+            $ewsDeviceMeasurements->whereDate('created_at', '<=', $end_date);
+        }
+
+        $ewsDeviceMeasurements = $ewsDeviceMeasurements->get();
 
         return $ewsDeviceMeasurements;
     }

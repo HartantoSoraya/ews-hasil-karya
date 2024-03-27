@@ -8,11 +8,18 @@ use App\Models\EwsDeviceAddress;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
-    public function getAllEwsDevices()
+    public function getAllEwsDevices($client_id = null)
     {
-        $getAllEwsDevices = EwsDevice::orderBy('name', 'asc')->get();
+        $query = EwsDevice::query();
+        if ($client_id) {
+            $query->whereHas('clients', function ($query) use ($client_id) {
+                $query->where('client_id', $client_id);
+            });
+        }
 
-        return $getAllEwsDevices;
+        $ewsDevices = $query->orderBy('name', 'asc')->get();
+
+        return $ewsDevices;
     }
 
     public function create(array $data)

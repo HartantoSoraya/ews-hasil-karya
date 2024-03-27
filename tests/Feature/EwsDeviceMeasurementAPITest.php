@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Enum\UserRoleEnum;
 use App\Models\EwsDevice;
 use App\Models\EwsDeviceAddress;
 use App\Models\EwsDeviceMeasurement;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class EwsDeviceMeasurementAPITest extends TestCase
@@ -20,7 +23,9 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
     public function test_ews_device_measurement_call_index_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -39,7 +44,9 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
     public function test_ews_device_measurement_call_create_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -60,9 +67,31 @@ class EwsDeviceMeasurementAPITest extends TestCase
         $this->assertDatabaseHas('ews_device_measurements', $ewsDeviceMeasurement);
     }
 
+    public function test_ews_device_measurement_call_create_with_api_token_expect_success()
+    {
+        $this->markTestSkipped('This test is skipped because it requires an API token.');
+
+        EwsDevice::factory()
+            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
+            ->create();
+
+        $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
+            ->make(['device_code' => EwsDevice::inRandomOrder()->first()->code])
+            ->toArray();
+
+        $response = $this->json('POST', '/api/v1/ews-device-measurement', $ewsDeviceMeasurement);
+
+        $response->assertSuccessful();
+
+        unset($ewsDeviceMeasurement['device_code']);
+        $this->assertDatabaseHas('ews_device_measurements', $ewsDeviceMeasurement);
+    }
+
     public function test_ews_device_measurement_api_call_show_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -81,7 +110,9 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
     public function test_ews_device_measurement_api_call_update_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -109,7 +140,9 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
     public function test_ews_device_measurement_api_call_delete_expect_success()
     {
-        $user = User::factory()->create();
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoleEnum::DEV)->first())
+            ->create();
 
         $this->actingAs($user);
 
@@ -125,8 +158,9 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $response->assertSuccessful();
 
-        unset($ewsDeviceMeasurement['device_code']);
+        $ewsDeviceMeasurement = $ewsDeviceMeasurement->toArray();
+        $ewsDeviceMeasurement = Arr::except($ewsDeviceMeasurement, ['device_code', 'created_at', 'updated_at', 'deleted_at']);
 
-        $this->assertSoftDeleted('ews_device_measurements', $ewsDeviceMeasurement->toArray());
+        $this->assertSoftDeleted('ews_device_measurements', $ewsDeviceMeasurement);
     }
 }

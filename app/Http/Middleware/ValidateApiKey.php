@@ -18,7 +18,6 @@ class ValidateApiKey
 
         $apiKey = $request->header('X-API-KEY');
 
-
         if ($apiKey != config('key.api_key')) {
             return response()->json(['message' => 'API key is missing or invalid'], 401);
         }

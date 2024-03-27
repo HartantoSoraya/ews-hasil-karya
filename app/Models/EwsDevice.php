@@ -26,4 +26,9 @@ class EwsDevice extends Model
     {
         return $this->hasMany(EwsDeviceMeasurement::class);
     }
+
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'client_ews_device_pivot');
+    }
 }
