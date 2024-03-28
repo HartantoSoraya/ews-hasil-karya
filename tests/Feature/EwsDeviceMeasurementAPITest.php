@@ -29,9 +29,12 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->count(5)->create();
+        for ($i = 0; $i < 5; $i++) {
+            EwsDevice::factory()
+                ->withExpectedCode()
+                ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
+                ->create();
+        }
 
         EwsDeviceMeasurement::factory()
             ->for(EwsDevice::inRandomOrder()->first(), 'device')

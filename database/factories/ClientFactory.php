@@ -31,7 +31,7 @@ class ClientFactory extends Factory
         ];
     }
 
-    public function withCodeIWant(): self
+    public function withExpectedCode(): self
     {
         return $this->state(function (array $attributes) {
             $clientRepository = new ClientRepository();
