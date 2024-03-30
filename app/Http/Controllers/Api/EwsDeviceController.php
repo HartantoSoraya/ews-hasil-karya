@@ -18,6 +18,13 @@ class EwsDeviceController extends Controller
     public function __construct(EwsDeviceRepositoryInterface $EwsDeviceRepository)
     {
         $this->EwsDeviceRepository = $EwsDeviceRepository;
+
+        $this->middleware(['permission:ews-device-list|ews-device-create|ews-device-edit|ews-device-delete'], [
+            'only' => ['index', 'show'],
+        ]);
+        $this->middleware(['permission:ews-device-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:ews-device-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:ews-device-delete'], ['only' => ['destroy']]);
     }
 
     public function index(Request $request)
