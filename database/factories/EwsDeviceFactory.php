@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Repositories\EwsDeviceRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class EwsDeviceFactory extends Factory
 {
@@ -14,19 +15,28 @@ class EwsDeviceFactory extends Factory
      */
     public function definition(): array
     {
-        $ewsDeviceRepository = new EwsDeviceRepository();
-
-        $code = '';
-        $tryCount = 0;
-        do {
-            $code = $ewsDeviceRepository->generateCode($tryCount);
-            $tryCount++;
-        } while (! $ewsDeviceRepository->isUniqueCode($code));
-
         return [
-            'code' => $code,
+            'code' => Str::random(10),
             'name' => $this->faker->unique()->word,
             'type' => $this->faker->randomElement(['sensor', 'actuator']),
         ];
+    }
+
+    public function withExpectedCode(): self
+    {
+        return $this->state(function (array $attributes) {
+            $ewsDeviceRepository = new EwsDeviceRepository();
+
+            $code = '';
+            $tryCount = 0;
+            do {
+                $code = $ewsDeviceRepository->generateCode($tryCount);
+                $tryCount++;
+            } while (! $ewsDeviceRepository->isUniqueCode($code));
+
+            return [
+                'code' => $code,
+            ];
+        });
     }
 }

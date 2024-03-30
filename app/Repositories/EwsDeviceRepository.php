@@ -83,7 +83,7 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 
     public function generateCode(int $tryCount): string
     {
-        $count = EwsDevice::count() + 1 + $tryCount;
+        $count = EwsDevice::withTrashed()->count() + 1 + $tryCount;
         $code = 'EWS'.str_pad($count, 3, '0', STR_PAD_LEFT);
 
         return $code;

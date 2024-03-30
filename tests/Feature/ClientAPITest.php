@@ -35,7 +35,7 @@ class ClientAPITest extends TestCase
         for ($i = 0; $i < 5; $i++) {
             Client::factory()
                 ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-                ->withCodeIwant()->withClientUser()
+                ->withExpectedCode()->withClientUser()
                 ->create();
         }
 
@@ -88,7 +88,7 @@ class ClientAPITest extends TestCase
 
         $client = Client::factory()
             ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $response = $this->json('GET', '/api/v1/client/'.$client->id);
@@ -110,7 +110,7 @@ class ClientAPITest extends TestCase
 
         $client = Client::factory()
             ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $updatedClient = Client::factory()
@@ -143,11 +143,11 @@ class ClientAPITest extends TestCase
 
         $client = Client::factory()
             ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $updatedClient = Client::factory()
-            ->withCodeIwant()
+            ->withExpectedCode()
             ->make(['code' => $client->code])
             ->toArray();
         $updatedClient['ews_devices'] = EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get()->pluck('id')->toArray();
@@ -177,12 +177,12 @@ class ClientAPITest extends TestCase
 
         $existingClient = Client::factory()
             ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $newClient = Client::factory()
             ->hasAttached(EwsDevice::inRandomOrder()->limit(mt_rand(1, 3))->get())
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $updatedClient = Client::factory()
@@ -205,7 +205,7 @@ class ClientAPITest extends TestCase
         $this->actingAs($user);
 
         $client = Client::factory()
-            ->withCodeIwant()->withClientUser()
+            ->withExpectedCode()->withClientUser()
             ->create();
 
         $response = $this->json('DELETE', '/api/v1/client/'.$client->id);
