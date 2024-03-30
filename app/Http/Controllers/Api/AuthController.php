@@ -85,6 +85,10 @@ class AuthController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
 
+            $user->getPermissionsViaRoles();
+            $user['permissions'] = $user['roles'][0]->permissions->pluck('name');
+            unset($user['roles']);
+
             return response()->json([
                 'message' => 'User data',
                 'data' => $user,
