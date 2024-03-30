@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\UserRoleEnum;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EwsDeviceController;
 use App\Http\Controllers\Api\EwsDeviceMeasurementController;
@@ -18,9 +19,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth:sanctum')->get('/me', [AuthController::class, 'me'])->name('me');
 
 Route::middleware('validate.api.key')->group(function () {
     Route::get('ews-devices', [EwsDeviceController::class, 'index']);
