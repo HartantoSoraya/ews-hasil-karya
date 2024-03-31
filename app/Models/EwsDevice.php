@@ -15,11 +15,17 @@ class EwsDevice extends Model
         'code',
         'name',
         'type',
+        'province',
+        'regency',
+        'district',
+        'subdistrict',
+        'address',
+        'description',
     ];
 
-    public function addresses()
+    public function addressHistories()
     {
-        return $this->hasMany(EwsDeviceAddress::class);
+        return $this->hasMany(EwsDeviceAddressHistory::class);
     }
 
     public function measurements()

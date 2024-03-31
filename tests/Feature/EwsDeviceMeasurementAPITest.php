@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Enum\UserRoleEnum;
 use App\Models\EwsDevice;
-use App\Models\EwsDeviceAddress;
 use App\Models\EwsDeviceMeasurement;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -30,10 +29,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
         $this->actingAs($user);
 
         for ($i = 0; $i < 5; $i++) {
-            EwsDevice::factory()
-                ->withExpectedCode()
-                ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-                ->create();
+            EwsDevice::factory()->withExpectedCode()->create();
         }
 
         EwsDeviceMeasurement::factory()
@@ -53,9 +49,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        EwsDevice::factory()->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
             ->make(['device_code' => EwsDevice::inRandomOrder()->first()->code])
@@ -74,9 +68,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
     {
         $this->markTestSkipped('This test is skipped because it requires an API token.');
 
-        EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        EwsDevice::factory()->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
             ->make(['device_code' => EwsDevice::inRandomOrder()->first()->code])
@@ -98,9 +90,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
             ->for($ewsDevice, 'device')
@@ -119,9 +109,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
             ->for($ewsDevice, 'device')
@@ -149,9 +137,7 @@ class EwsDeviceMeasurementAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
 
         $ewsDeviceMeasurement = EwsDeviceMeasurement::factory()
             ->for($ewsDevice, 'device')

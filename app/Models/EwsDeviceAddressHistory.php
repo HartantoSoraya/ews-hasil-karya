@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class EwsDeviceAddress extends Model
+class EwsDeviceAddressHistory extends Model
 {
     use HasFactory, SoftDeletes, UUID;
 
     protected $fillable = [
         'ews_device_id',
+        'province',
+        'regency',
+        'district',
+        'subdistrict',
         'address',
     ];
 

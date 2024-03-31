@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ews_device_addresses', function (Blueprint $table) {
+        Schema::create('ews_device_address_histories', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
             $table->uuid('ews_device_id');
             $table->foreign('ews_device_id')->references('id')->on('ews_devices');
+            $table->string('province')->nullable();
+            $table->string('regency')->nullable();
+            $table->string('district')->nullable();
+            $table->string('subdistrict')->nullable();
             $table->string('address');
 
             $table->softDeletes();
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ews_device_addresses');
+        Schema::dropIfExists('ews_device_address_histories');
     }
 };
