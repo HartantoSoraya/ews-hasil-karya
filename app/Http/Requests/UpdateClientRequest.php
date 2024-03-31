@@ -31,6 +31,10 @@ class UpdateClientRequest extends FormRequest
 
     public function prepareForValidation()
     {
+        $this->merge([
+            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
+        ]);
+
         if (! $this->has('ews_devices')) {
             $this->merge(['ews_devices' => []]);
         }
