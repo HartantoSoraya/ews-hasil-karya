@@ -19,6 +19,7 @@ class EwsDeviceResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'type' => $this->type,
+            'address' => $this->addreses,
         ];
     }
 }
