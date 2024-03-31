@@ -17,15 +17,17 @@ class UpdateEwsDeviceRequest extends FormRequest
             'code' => 'required|string|max:255|unique:ews_devices,code,'.$this->route('id').',id',
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'addresses' => 'array',
-            'addresses.*.address' => 'required|string|max:255',
+            'province' => 'nullable|string|max:255',
+            'regency' => 'nullable|string|max:255',
+            'district' => 'nullable|string|max:255',
+            'subdistrict' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
         ];
     }
 
     public function prepareForValidation()
     {
-        if (! $this->has('addresses')) {
-            $this->merge(['addresses' => []]);
-        }
+
     }
 }

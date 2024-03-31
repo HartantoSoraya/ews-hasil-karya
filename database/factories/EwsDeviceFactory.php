@@ -19,6 +19,12 @@ class EwsDeviceFactory extends Factory
             'code' => Str::random(10),
             'name' => $this->faker->unique()->word,
             'type' => $this->faker->randomElement(['sensor', 'actuator']),
+            'province' => $this->faker->state,
+            'regency' => $this->faker->city,
+            'district' => $this->faker->city,
+            'subdistrict' => $this->faker->city,
+            'address' => $this->faker->address,
+            'description' => $this->faker->sentence,
         ];
     }
 

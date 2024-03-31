@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\EwsDeviceRepositoryInterface;
 use App\Models\EwsDevice;
-use App\Models\EwsDeviceAddress;
+use App\Models\EwsDeviceAddressHistory;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
@@ -28,14 +28,18 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         $ewsDevice->code = $data['code'];
         $ewsDevice->name = $data['name'];
         $ewsDevice->type = $data['type'];
+        $ewsDevice->province = $data['province'];
+        $ewsDevice->regency = $data['regency'];
+        $ewsDevice->district = $data['district'];
+        $ewsDevice->subdistrict = $data['subdistrict'];
+        $ewsDevice->address = $data['address'];
+        $ewsDevice->description = $data['description'];
         $ewsDevice->save();
 
-        for ($i = 0; $i < count($data['addresses']); $i++) {
-            $ewsDeviceAddress = new EwsDeviceAddress();
-            $ewsDeviceAddress->ews_device_id = $ewsDevice->id;
-            $ewsDeviceAddress->address = $data['addresses'][$i]['address'];
-            $ewsDeviceAddress->save();
-        }
+        $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
+        $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
+        $ewsDeviceAddressHistory->address = $ewsDevice->address;
+        $ewsDeviceAddressHistory->save();
 
         return $ewsDevice;
     }
@@ -60,15 +64,18 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         $ewsDevice->code = $data['code'];
         $ewsDevice->name = $data['name'];
         $ewsDevice->type = $data['type'];
+        $ewsDevice->province = $data['province'];
+        $ewsDevice->regency = $data['regency'];
+        $ewsDevice->district = $data['district'];
+        $ewsDevice->subdistrict = $data['subdistrict'];
+        $ewsDevice->address = $data['address'];
+        $ewsDevice->description = $data['description'];
         $ewsDevice->save();
 
-        $ewsDevice->addresses()->delete();
-        for ($i = 0; $i < count($data['addresses']); $i++) {
-            $ewsDeviceAddress = new EwsDeviceAddress();
-            $ewsDeviceAddress->ews_device_id = $ewsDevice->id;
-            $ewsDeviceAddress->address = $data['addresses'][$i]['address'];
-            $ewsDeviceAddress->save();
-        }
+        $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
+        $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
+        $ewsDeviceAddressHistory->address = $ewsDevice->address;
+        $ewsDeviceAddressHistory->save();
 
         return $ewsDevice;
     }

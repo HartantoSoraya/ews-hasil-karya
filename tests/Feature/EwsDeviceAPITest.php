@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Enum\UserRoleEnum;
 use App\Models\EwsDevice;
-use App\Models\EwsDeviceAddress;
+use App\Models\EwsDeviceAddressHistory;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -29,10 +29,16 @@ class EwsDeviceAPITest extends TestCase
         $this->actingAs($user);
 
         for ($i = 0; $i < 5; $i++) {
-            EwsDevice::factory()
-                ->withExpectedCode()
-                ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-                ->create();
+            $ewsDevice = EwsDevice::factory()->withExpectedCode()->create();
+
+            EwsDeviceAddressHistory::factory()->create([
+                'ews_device_id' => $ewsDevice->id,
+                'province' => $ewsDevice->province,
+                'regency' => $ewsDevice->regency,
+                'district' => $ewsDevice->district,
+                'subdistrict' => $ewsDevice->subdistrict,
+                'address' => $ewsDevice->address,
+            ]);
         }
 
         $response = $this->json('GET', '/api/v1/ews-devices');
@@ -48,10 +54,7 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->make(['code' => 'AUTO'])
-            ->toArray();
+        $ewsDevice = EwsDevice::factory()->make(['code' => 'AUTO'])->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device', $ewsDevice);
 
@@ -70,9 +73,16 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
+
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $ewsDevice->id,
+            'province' => $ewsDevice->province,
+            'regency' => $ewsDevice->regency,
+            'district' => $ewsDevice->district,
+            'subdistrict' => $ewsDevice->subdistrict,
+            'address' => $ewsDevice->address,
+        ]);
 
         $response = $this->json('GET', '/api/v1/ews-device/'.$ewsDevice->id);
 
@@ -87,14 +97,18 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
 
-        $updatedEwsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->make(['code' => 'AUTO'])
-            ->toArray();
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $ewsDevice->id,
+            'province' => $ewsDevice->province,
+            'regency' => $ewsDevice->regency,
+            'district' => $ewsDevice->district,
+            'subdistrict' => $ewsDevice->subdistrict,
+            'address' => $ewsDevice->address,
+        ]);
+
+        $updatedEwsDevice = EwsDevice::factory()->make(['code' => 'AUTO'])->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device/'.$ewsDevice->id, $updatedEwsDevice);
 
@@ -113,14 +127,18 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
 
-        $updatedEwsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->make(['code' => $ewsDevice->code])
-            ->toArray();
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $ewsDevice->id,
+            'province' => $ewsDevice->province,
+            'regency' => $ewsDevice->regency,
+            'district' => $ewsDevice->district,
+            'subdistrict' => $ewsDevice->subdistrict,
+            'address' => $ewsDevice->address,
+        ]);
+
+        $updatedEwsDevice = EwsDevice::factory()->make(['code' => $ewsDevice->code])->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device/'.$ewsDevice->id, $updatedEwsDevice);
 
@@ -137,18 +155,29 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $existingEwsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $existingEwsDevice = EwsDevice::factory()->create();
 
-        $newEwsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $existingEwsDevice->id,
+            'province' => $existingEwsDevice->province,
+            'regency' => $existingEwsDevice->regency,
+            'district' => $existingEwsDevice->district,
+            'subdistrict' => $existingEwsDevice->subdistrict,
+            'address' => $existingEwsDevice->address,
+        ]);
 
-        $updatedEwsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->make(['code' => $existingEwsDevice->code])
-            ->toArray();
+        $newEwsDevice = EwsDevice::factory()->create();
+
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $newEwsDevice->id,
+            'province' => $newEwsDevice->province,
+            'regency' => $newEwsDevice->regency,
+            'district' => $newEwsDevice->district,
+            'subdistrict' => $newEwsDevice->subdistrict,
+            'address' => $newEwsDevice->address,
+        ]);
+
+        $updatedEwsDevice = EwsDevice::factory()->make(['code' => $existingEwsDevice->code])->toArray();
 
         $response = $this->json('POST', '/api/v1/ews-device/'.$newEwsDevice->id, $updatedEwsDevice);
 
@@ -163,9 +192,16 @@ class EwsDeviceAPITest extends TestCase
 
         $this->actingAs($user);
 
-        $ewsDevice = EwsDevice::factory()
-            ->has(EwsDeviceAddress::factory()->count(mt_rand(1, 3)), 'addresses')
-            ->create();
+        $ewsDevice = EwsDevice::factory()->create();
+
+        EwsDeviceAddressHistory::factory()->create([
+            'ews_device_id' => $ewsDevice->id,
+            'province' => $ewsDevice->province,
+            'regency' => $ewsDevice->regency,
+            'district' => $ewsDevice->district,
+            'subdistrict' => $ewsDevice->subdistrict,
+            'address' => $ewsDevice->address,
+        ]);
 
         $response = $this->json('DELETE', '/api/v1/ews-device/'.$ewsDevice->id);
 

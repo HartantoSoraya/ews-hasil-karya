@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EwsDeviceResource extends JsonResource
+class EwsDeviceAddressHistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,16 +16,12 @@ class EwsDeviceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
-            'name' => $this->name,
-            'type' => $this->type,
+            'created_at' => $this->created_at,
             'province' => $this->province,
             'regency' => $this->regency,
             'district' => $this->district,
             'subdistrict' => $this->subdistrict,
             'address' => $this->address,
-            'description' => $this->description,
-            'address_histories' => EwsDeviceAddressHistoryResource::collection($this->addressHistories),
         ];
     }
 }

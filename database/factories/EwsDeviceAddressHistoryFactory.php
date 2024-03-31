@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class EwsDeviceAddressFactory extends Factory
+class EwsDeviceAddressHistoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,6 +14,10 @@ class EwsDeviceAddressFactory extends Factory
     public function definition(): array
     {
         return [
+            'province' => $this->faker->state,
+            'regency' => $this->faker->city,
+            'district' => $this->faker->city,
+            'subdistrict' => $this->faker->city,
             'address' => $this->faker->address,
         ];
     }

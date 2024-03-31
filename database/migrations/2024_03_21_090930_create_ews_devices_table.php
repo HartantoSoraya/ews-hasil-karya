@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('code');
             $table->string('name');
             $table->string('type');
+            $table->string('province')->nullable();
+            $table->string('regency')->nullable();
+            $table->string('district')->nullable();
+            $table->string('subdistrict')->nullable();
+            $table->string('address')->nullable();
+            $table->string('description')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
