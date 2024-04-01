@@ -42,6 +42,12 @@ class RoleSeeder extends Seeder
             $permissions = Permission::pluck('id', 'id')->all();
             if ($role->name === UserRoleEnum::DEV->value) {
                 $role->syncPermissions($permissions);
+            } elseif ($role->name === UserRoleEnum::CLIENT->value) {
+                $role->syncPermissions([
+                    'dashboard',
+                    'ews-device-list',
+                    'ews-device-measurement-list',
+                ]);
             }
         }
     }
