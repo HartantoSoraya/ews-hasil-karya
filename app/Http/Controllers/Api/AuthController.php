@@ -27,6 +27,9 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
+        $user->getPermissionsViaRoles();
+        $user['permissions'] = $user['roles'][0]->permissions->pluck('name');
+        unset($user['roles']);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

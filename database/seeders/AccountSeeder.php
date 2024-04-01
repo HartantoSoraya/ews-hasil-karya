@@ -18,6 +18,6 @@ class AccountSeeder extends Seeder
         User::create([
             'email' => 'client@admin.com',
             'password' => bcrypt('password'),
-        ]);
+        ])->assignRole(UserRoleEnum::CLIENT->value);
     }
 }
