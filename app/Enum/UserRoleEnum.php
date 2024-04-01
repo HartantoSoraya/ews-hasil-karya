@@ -10,5 +10,4 @@ enum UserRoleEnum: string
 
     case DEV = 'dev';
     case CLIENT = 'client';
-    case CLIENT_USER = 'client_user';
 }

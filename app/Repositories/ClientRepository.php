@@ -29,28 +29,29 @@ class ClientRepository implements ClientRepositoryInterface
         DB::beginTransaction();
 
         try {
-            $user = new User();
-            $user->email = $data['email'];
-            $user->password = bcrypt($data['password']);
-            $user->save();
-            $user->assignRole(UserRoleEnum::CLIENT_USER);
+            $user = User::create([
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+            ]);
 
-            $client = new Client();
-            $client->user_id = $user->id;
-            $client->code = $data['code'];
-            $client->name = $data['name'];
-            $client->province = $data['province'];
-            $client->regency = $data['regency'];
-            $client->district = $data['district'];
-            $client->subdistrict = $data['subdistrict'];
-            $client->address = $data['address'];
-            $client->phone = $data['phone'];
-            $client->is_active = $data['is_active'];
-            $client->save();
+            $user->assignRole(UserRoleEnum::CLIENT);
 
-            foreach ($data['ews_devices'] as $ewsDeviceId) {
-                $client->ewsDevices()->attach($ewsDeviceId);
-            }
+            $clientData = [
+                'user_id' => $user->id,
+                'code' => $data['code'],
+                'name' => $data['name'],
+                'province' => $data['province'],
+                'regency' => $data['regency'],
+                'district' => $data['district'],
+                'subdistrict' => $data['subdistrict'],
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'is_active' => $data['is_active'],
+            ];
+
+            $client = Client::create($clientData);
+
+            $client->ewsDevices()->attach($data['ews_devices']);
 
             DB::commit();
 
@@ -85,10 +86,8 @@ class ClientRepository implements ClientRepositoryInterface
                 $user->save();
             }
 
-            $client->ewsDevices()->detach();
-            foreach ($data['ews_devices'] as $ewsDeviceId) {
-                $client->ewsDevices()->attach($ewsDeviceId);
-            }
+            $client->ewsDevices()->sync($data['ews_devices']);
+
 
             DB::commit();
 
@@ -139,7 +138,7 @@ class ClientRepository implements ClientRepositoryInterface
     public function generateCode(int $tryCount): string
     {
         $count = Client::withTrashed()->count() + 1 + $tryCount;
-        $code = 'CL'.str_pad($count, 3, '0', STR_PAD_LEFT);
+        $code = 'CL' . str_pad($count, 3, '0', STR_PAD_LEFT);
 
         return $code;
     }

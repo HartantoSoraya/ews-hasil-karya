@@ -23,7 +23,7 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
     }
 
     public function create(array $data)
-    {
+{
         $ewsDevice = new EwsDevice();
         $ewsDevice->code = $data['code'];
         $ewsDevice->name = $data['name'];
