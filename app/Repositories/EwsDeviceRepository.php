@@ -38,6 +38,10 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 
         $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
         $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
+        $ewsDeviceAddressHistory->province = $ewsDevice->province;
+        $ewsDeviceAddressHistory->regency = $ewsDevice->regency;
+        $ewsDeviceAddressHistory->district = $ewsDevice->district;
+        $ewsDeviceAddressHistory->subdistrict = $ewsDevice->subdistrict;
         $ewsDeviceAddressHistory->address = $ewsDevice->address;
         $ewsDeviceAddressHistory->save();
 
@@ -74,6 +78,10 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 
         $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
         $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
+        $ewsDeviceAddressHistory->province = $ewsDevice->province;
+        $ewsDeviceAddressHistory->regency = $ewsDevice->regency;
+        $ewsDeviceAddressHistory->district = $ewsDevice->district;
+        $ewsDeviceAddressHistory->subdistrict = $ewsDevice->subdistrict;
         $ewsDeviceAddressHistory->address = $ewsDevice->address;
         $ewsDeviceAddressHistory->save();
 

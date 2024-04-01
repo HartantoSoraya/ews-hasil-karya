@@ -28,6 +28,40 @@ class StoreEwsDeviceRequest extends FormRequest
 
     public function prepareForValidation()
     {
+        if (! $this->has('province')) {
+            $this->merge([
+                'province' => '',
+            ]);
+        }
 
+        if (! $this->has('regency')) {
+            $this->merge([
+                'regency' => '',
+            ]);
+        }
+
+        if (! $this->has('district')) {
+            $this->merge([
+                'district' => '',
+            ]);
+        }
+
+        if (! $this->has('subdistrict')) {
+            $this->merge([
+                'subdistrict' => '',
+            ]);
+        }
+
+        if (! $this->has('address')) {
+            $this->merge([
+                'address' => '',
+            ]);
+        }
+
+        if (! $this->has('description')) {
+            $this->merge([
+                'description' => '',
+            ]);
+        }
     }
 }
