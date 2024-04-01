@@ -21,13 +21,47 @@ class UpdateEwsDeviceRequest extends FormRequest
             'regency' => 'nullable|string|max:255',
             'district' => 'nullable|string|max:255',
             'subdistrict' => 'nullable|string|max:255',
-            'address' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:255',
         ];
     }
 
     public function prepareForValidation()
     {
+        if (! $this->has('province')) {
+            $this->merge([
+                'province' => '',
+            ]);
+        }
 
+        if (! $this->has('regency')) {
+            $this->merge([
+                'regency' => '',
+            ]);
+        }
+
+        if (! $this->has('district')) {
+            $this->merge([
+                'district' => '',
+            ]);
+        }
+
+        if (! $this->has('subdistrict')) {
+            $this->merge([
+                'subdistrict' => '',
+            ]);
+        }
+
+        if (! $this->has('address')) {
+            $this->merge([
+                'address' => '',
+            ]);
+        }
+
+        if (! $this->has('description')) {
+            $this->merge([
+                'description' => '',
+            ]);
+        }
     }
 }
