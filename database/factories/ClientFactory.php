@@ -53,7 +53,7 @@ class ClientFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $user = User::factory()
-                ->hasAttached(Role::where('name', '=', UserRoleEnum::CLIENT_USER)->first())
+                ->hasAttached(Role::where('name', '=', UserRoleEnum::CLIENT)->first())
                 ->create();
 
             return [

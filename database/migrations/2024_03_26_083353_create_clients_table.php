@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('regency')->nullable();
             $table->string('district')->nullable();
             $table->string('subdistrict')->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('phone');
             $table->boolean('is_active')->default(true);
 

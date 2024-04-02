@@ -39,5 +39,41 @@ class StoreClientRequest extends FormRequest
         if (! $this->has('ews_devices')) {
             $this->merge(['ews_devices' => []]);
         }
+
+          if (! $this->has('province')) {
+            $this->merge([
+                'province' => '',
+            ]);
+        }
+
+        if (! $this->has('regency')) {
+            $this->merge([
+                'regency' => '',
+            ]);
+        }
+
+        if (! $this->has('district')) {
+            $this->merge([
+                'district' => '',
+            ]);
+        }
+
+        if (! $this->has('subdistrict')) {
+            $this->merge([
+                'subdistrict' => '',
+            ]);
+        }
+
+        if (! $this->has('address')) {
+            $this->merge([
+                'address' => '',
+            ]);
+        }
+
+        if (! $this->has('description')) {
+            $this->merge([
+                'description' => '',
+            ]);
+        }
     }
 }
