@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('district')->nullable();
             $table->string('subdistrict')->nullable();
             $table->string('address')->nullable();
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->boolean('is_active')->default(true);
 
             $table->softDeletes();

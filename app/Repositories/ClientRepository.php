@@ -36,7 +36,7 @@ class ClientRepository implements ClientRepositoryInterface
 
             $user->assignRole(UserRoleEnum::CLIENT);
 
-            $clientData = [
+            $client = Client::create([
                 'user_id' => $user->id,
                 'code' => $data['code'],
                 'name' => $data['name'],
@@ -47,9 +47,7 @@ class ClientRepository implements ClientRepositoryInterface
                 'address' => $data['address'],
                 'phone' => $data['phone'],
                 'is_active' => $data['is_active'],
-            ];
-
-            $client = Client::create($clientData);
+            ]);
 
             $client->ewsDevices()->attach($data['ews_devices']);
 
@@ -87,7 +85,6 @@ class ClientRepository implements ClientRepositoryInterface
             }
 
             $client->ewsDevices()->sync($data['ews_devices']);
-
 
             DB::commit();
 
@@ -138,7 +135,7 @@ class ClientRepository implements ClientRepositoryInterface
     public function generateCode(int $tryCount): string
     {
         $count = Client::withTrashed()->count() + 1 + $tryCount;
-        $code = 'CL' . str_pad($count, 3, '0', STR_PAD_LEFT);
+        $code = 'CL'.str_pad($count, 3, '0', STR_PAD_LEFT);
 
         return $code;
     }
