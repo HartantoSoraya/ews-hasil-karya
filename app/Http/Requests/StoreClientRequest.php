@@ -23,7 +23,7 @@ class StoreClientRequest extends FormRequest
             'district' => 'nullable|string|max:255',
             'subdistrict' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
-            'phone' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:255',
             'is_active' => 'required|boolean',
             'ews_devices' => 'nullable|array',
             'ews_devices.*' => 'required|exists:ews_devices,id',
@@ -32,15 +32,7 @@ class StoreClientRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
-        ]);
-
-        if (! $this->has('ews_devices')) {
-            $this->merge(['ews_devices' => []]);
-        }
-
-          if (! $this->has('province')) {
+        if (! $this->has('province')) {
             $this->merge([
                 'province' => '',
             ]);
@@ -70,10 +62,24 @@ class StoreClientRequest extends FormRequest
             ]);
         }
 
+        if (! $this->has('phone')) {
+            $this->merge([
+                'phone' => '',
+            ]);
+        }
+
         if (! $this->has('description')) {
             $this->merge([
                 'description' => '',
             ]);
+        }
+
+        $this->merge([
+            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
+        ]);
+
+        if (! $this->has('ews_devices')) {
+            $this->merge(['ews_devices' => []]);
         }
     }
 }

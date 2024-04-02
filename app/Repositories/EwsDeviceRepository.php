@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\EwsDeviceRepositoryInterface;
 use App\Models\EwsDevice;
 use App\Models\EwsDeviceAddressHistory;
+use Illuminate\Support\Facades\DB;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
@@ -23,29 +24,34 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
     }
 
     public function create(array $data)
-{
-        $ewsDevice = new EwsDevice();
-        $ewsDevice->code = $data['code'];
-        $ewsDevice->name = $data['name'];
-        $ewsDevice->type = $data['type'];
-        $ewsDevice->province = $data['province'];
-        $ewsDevice->regency = $data['regency'];
-        $ewsDevice->district = $data['district'];
-        $ewsDevice->subdistrict = $data['subdistrict'];
-        $ewsDevice->address = $data['address'];
-        $ewsDevice->description = $data['description'];
-        $ewsDevice->save();
+    {
+        DB::beginTransaction();
 
-        $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
-        $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
-        $ewsDeviceAddressHistory->province = $ewsDevice->province;
-        $ewsDeviceAddressHistory->regency = $ewsDevice->regency;
-        $ewsDeviceAddressHistory->district = $ewsDevice->district;
-        $ewsDeviceAddressHistory->subdistrict = $ewsDevice->subdistrict;
-        $ewsDeviceAddressHistory->address = $ewsDevice->address;
-        $ewsDeviceAddressHistory->save();
+        try {
+            $ewsDevice = new EwsDevice();
+            $ewsDevice->code = $data['code'];
+            $ewsDevice->name = $data['name'];
+            $ewsDevice->type = $data['type'];
+            $ewsDevice->province = $data['province'];
+            $ewsDevice->regency = $data['regency'];
+            $ewsDevice->district = $data['district'];
+            $ewsDevice->subdistrict = $data['subdistrict'];
+            $ewsDevice->address = $data['address'];
+            $ewsDevice->description = $data['description'];
+            $ewsDevice->save();
 
-        return $ewsDevice;
+            if ($data['province'] || $data['regency'] || $data['district'] || $data['subdistrict'] || $data['address']) {
+                $this->insertToAddressHistory($ewsDevice);
+            }
+
+            DB::commit();
+
+            return $ewsDevice;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $e->getMessage();
+        }
     }
 
     public function getEwsDeviceById(string $id)
@@ -64,28 +70,45 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 
     public function update(array $data, string $id)
     {
-        $ewsDevice = EwsDevice::find($id);
-        $ewsDevice->code = $data['code'];
-        $ewsDevice->name = $data['name'];
-        $ewsDevice->type = $data['type'];
-        $ewsDevice->province = $data['province'];
-        $ewsDevice->regency = $data['regency'];
-        $ewsDevice->district = $data['district'];
-        $ewsDevice->subdistrict = $data['subdistrict'];
-        $ewsDevice->address = $data['address'];
-        $ewsDevice->description = $data['description'];
-        $ewsDevice->save();
+        DB::beginTransaction();
 
-        $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
-        $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
-        $ewsDeviceAddressHistory->province = $ewsDevice->province;
-        $ewsDeviceAddressHistory->regency = $ewsDevice->regency;
-        $ewsDeviceAddressHistory->district = $ewsDevice->district;
-        $ewsDeviceAddressHistory->subdistrict = $ewsDevice->subdistrict;
-        $ewsDeviceAddressHistory->address = $ewsDevice->address;
-        $ewsDeviceAddressHistory->save();
+        try {
+            $ewsDevice = EwsDevice::find($id);
 
-        return $ewsDevice;
+            $insertToAddressHistory = false;
+            if (
+                $data['province'] != $ewsDevice->province ||
+                $data['regency'] != $ewsDevice->regency ||
+                $data['district'] != $ewsDevice->district ||
+                $data['subdistrict'] != $ewsDevice->subdistrict ||
+                $data['address'] != $ewsDevice->address
+            ) {
+                $insertToAddressHistory = true;
+            }
+
+            $ewsDevice->code = $data['code'];
+            $ewsDevice->name = $data['name'];
+            $ewsDevice->type = $data['type'];
+            $ewsDevice->province = $data['province'];
+            $ewsDevice->regency = $data['regency'];
+            $ewsDevice->district = $data['district'];
+            $ewsDevice->subdistrict = $data['subdistrict'];
+            $ewsDevice->address = $data['address'];
+            $ewsDevice->description = $data['description'];
+            $ewsDevice->save();
+
+            if ($insertToAddressHistory) {
+                $this->insertToAddressHistory($ewsDevice);
+            }
+
+            DB::commit();
+
+            return $ewsDevice;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $e->getMessage();
+        }
     }
 
     public function delete(string $id)
@@ -112,5 +135,17 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         }
 
         return $query->doesntExist();
+    }
+
+    private function insertToAddressHistory(EwsDevice $ewsDevice)
+    {
+        $ewsDeviceAddressHistory = new EwsDeviceAddressHistory();
+        $ewsDeviceAddressHistory->ews_device_id = $ewsDevice->id;
+        $ewsDeviceAddressHistory->province = $ewsDevice->province;
+        $ewsDeviceAddressHistory->regency = $ewsDevice->regency;
+        $ewsDeviceAddressHistory->district = $ewsDevice->district;
+        $ewsDeviceAddressHistory->subdistrict = $ewsDevice->subdistrict;
+        $ewsDeviceAddressHistory->address = $ewsDevice->address;
+        $ewsDeviceAddressHistory->save();
     }
 }

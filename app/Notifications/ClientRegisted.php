@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,7 +11,9 @@ class ClientRegisted extends Notification
     use Queueable;
 
     public string $name;
+
     public string $email;
+
     public string $password;
 
     /**
@@ -41,10 +42,10 @@ class ClientRegisted extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Hallo ' . $this->name . ', Terima kasih telah mendaftar di aplikasi kami')
+            ->subject('Hallo '.$this->name.', Terima kasih telah mendaftar di aplikasi kami')
             ->line('Berikut adalah informasi akun anda:')
-            ->line('Email: ' . $this->email)
-            ->line('Password: ' . $this->password)
+            ->line('Email: '.$this->email)
+            ->line('Password: '.$this->password)
             ->line('Silahkan login di aplikasi kami dengan menggunakan email dan password diatas.');
 
     }
