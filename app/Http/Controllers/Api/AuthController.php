@@ -105,7 +105,7 @@ class AuthController extends Controller
                 'data' => [
                     'id' => $user->id,
                     'client_id' => $user->client->id ?? '',
-                    'name' => $user->client->name ?? $user->name,
+                    'name' => $user->client->name ?? "Admin",
                     'email' => $user->email,
                     'permissions' => $permissions,
                     'role' => $role,
