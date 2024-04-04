@@ -5,20 +5,20 @@ namespace App\Repositories;
 use App\Interfaces\EwsDeviceRepositoryInterface;
 use App\Models\EwsDevice;
 use App\Models\EwsDeviceAddressHistory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
-    public function getAllEwsDevices($client_id = null)
+    public function getAllEwsDevices()
     {
-        $query = EwsDevice::query();
-        if ($client_id) {
-            $query->whereHas('clients', function ($query) use ($client_id) {
-                $query->where('client_id', $client_id);
-            });
-        }
+        $auth = Auth::user();
 
-        $ewsDevices = $query->orderBy('name', 'asc')->get();
+        if ($auth->hasRole('client')) {
+            $ewsDevices = $auth->client->ewsDevices()->orderBy('name', 'asc')->get();
+        } else {
+            $ewsDevices = EwsDevice::orderBy('name', 'asc')->get();
+        }
 
         return $ewsDevices;
     }
