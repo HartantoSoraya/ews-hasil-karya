@@ -6,6 +6,7 @@ use App\Enum\UserRoleEnum;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
 use App\Models\User;
+use App\Notifications\ClientRegistered;
 use Illuminate\Support\Facades\DB;
 
 class ClientRepository implements ClientRepositoryInterface
@@ -52,6 +53,8 @@ class ClientRepository implements ClientRepositoryInterface
             $client->ewsDevices()->attach($data['ews_devices']);
 
             DB::commit();
+
+            $this->sendNotification($user->id);
 
             return $client;
         } catch (\Exception $e) {
@@ -149,5 +152,20 @@ class ClientRepository implements ClientRepositoryInterface
         }
 
         return $query->doesntExist();
+    }
+
+    public function sendNotification(string $userId)
+    {
+        $user = User::findOrFail($userId);
+
+        $client = Client::where('user_id', $userId)->first();
+
+        $clientData = [
+            'name' => $client->name,
+            'email' => $user->email,
+            'password' => request('password'),
+        ];
+
+        $user->notify(new ClientRegistered($clientData));
     }
 }

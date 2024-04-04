@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AccountSeeder::class,
 
-            EwsDeviceSeeder::class,
+            // EwsDeviceSeeder::class,
         ]);
     }
 }
