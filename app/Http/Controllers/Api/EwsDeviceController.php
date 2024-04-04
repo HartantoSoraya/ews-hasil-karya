@@ -117,7 +117,6 @@ class EwsDeviceController extends Controller
                 ->latest('created_at')
                 ->first();
 
-            // Return the latest measurement
             if ($latestMeasurement) {
                 $chartData = [
                     [

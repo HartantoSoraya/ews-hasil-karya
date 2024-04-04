@@ -54,7 +54,11 @@ class ClientRepository implements ClientRepositoryInterface
 
             DB::commit();
 
-            $this->sendNotification($user->id);
+            $user->notify(new ClientRegistered([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+            ]));
 
             return $client;
         } catch (\Exception $e) {
@@ -152,20 +156,5 @@ class ClientRepository implements ClientRepositoryInterface
         }
 
         return $query->doesntExist();
-    }
-
-    public function sendNotification(string $userId)
-    {
-        $user = User::findOrFail($userId);
-
-        $client = Client::where('user_id', $userId)->first();
-
-        $clientData = [
-            'name' => $client->name,
-            'email' => $user->email,
-            'password' => request('password'),
-        ];
-
-        $user->notify(new ClientRegistered($clientData));
     }
 }

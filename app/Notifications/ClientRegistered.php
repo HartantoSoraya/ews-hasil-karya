@@ -41,7 +41,9 @@ class ClientRegistered extends Notification
             ->line('Berikut adalah informasi akun anda:')
             ->line('Email: '.$this->client['email'])
             ->line('Password: '.$this->client['password'])
-            ->line('Silahkan login di aplikasi kami dengan menggunakan email dan password diatas.');
+            ->line('Silahkan login melalui link berikut:')
+            ->line('https://ews.hasilkarya.co.id/auth/login')
+            ->line('Terima kasih telah menggunakan aplikasi kami');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -88,13 +89,27 @@ class AuthController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
 
-            $user->getPermissionsViaRoles();
-            $user['permissions'] = $user['roles'][0]->permissions->pluck('name');
-            unset($user['roles']);
+            $user->load('roles.permissions');
+
+            $permissions = $user->roles->flatMap->permissions->pluck('name');
+            $role = $user->roles->first()->name;
+
+            if ($role === 'client') {
+                $client = Client::where('user_id', $user->id)->first();
+
+                $user->client = $client;
+            }
 
             return response()->json([
                 'message' => 'User data',
-                'data' => $user,
+                'data' => [
+                    'id' => $user->id,
+                    'client_id' => $user->client->id ?? '',
+                    'name' => $user->client->name ?? $user->name,
+                    'email' => $user->email,
+                    'permissions' => $permissions,
+                    'role' => $role,
+                ],
             ]);
         }
 
@@ -102,4 +117,5 @@ class AuthController extends Controller
             'message' => 'You are not logged in',
         ], 401);
     }
+
 }
