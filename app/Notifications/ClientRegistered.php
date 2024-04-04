@@ -3,27 +3,22 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ClientRegisted extends Notification
+class ClientRegistered extends Notification
 {
     use Queueable;
 
-    public string $name;
-
-    public string $email;
-
-    public string $password;
+    public array $client;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $name, string $email, string $password)
+    public function __construct(array $client)
     {
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
+        $this->client = $client;
     }
 
     /**
@@ -42,12 +37,11 @@ class ClientRegisted extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Hallo '.$this->name.', Terima kasih telah mendaftar di aplikasi kami')
+            ->subject('Hallo '.$this->client['name'].', Terima kasih telah mendaftar di aplikasi kami')
             ->line('Berikut adalah informasi akun anda:')
-            ->line('Email: '.$this->email)
-            ->line('Password: '.$this->password)
+            ->line('Email: '.$this->client['email'])
+            ->line('Password: '.$this->client['password'])
             ->line('Silahkan login di aplikasi kami dengan menggunakan email dan password diatas.');
-
     }
 
     /**
