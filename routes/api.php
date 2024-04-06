@@ -27,21 +27,6 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth:sanctum')->get('/me', [AuthController::class, 'me'])->name('me');
 
-Route::middleware('validate.api.key')->group(function () {
-    Route::get('ews-devices', [EwsDeviceController::class, 'index']);
-    Route::get('ews-device-measurements', [EwsDeviceController::class, 'index']);
-    Route::get('ews-device-measurements/chart', [EwsDeviceController::class, 'chart']);
-
-    Route::post('ews-device', [EwsDeviceController::class, 'store']);
-    Route::get('ews-device/{id}', [EwsDeviceController::class, 'show']);
-    Route::post('ews-device/{id}', [EwsDeviceController::class, 'update']);
-    Route::delete('ews-device/{id}', [EwsDeviceController::class, 'destroy']);
-
-    Route::get('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'show']);
-    Route::post('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'update']);
-    Route::delete('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'destroy']);
-});
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('ews-devices', [EwsDeviceController::class, 'index']);
 
@@ -50,9 +35,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('ews-device/{id}', [EwsDeviceController::class, 'update']);
     Route::delete('ews-device/{id}', [EwsDeviceController::class, 'destroy']);
 
-    Route::get('ews-device-measurements', [EwsDeviceController::class, 'index']);
+    Route::get('ews-device-measurements', [EwsDeviceMeasurementController::class, 'index']);
 
-    Route::get('ews-device-measurements/chart', [EwsDeviceController::class, 'chart']);
+    Route::get('ews-device-measurements/chart', [EwsDeviceMeasurementController::class, 'chart']);
     Route::post('ews-device-measurement', [EwsDeviceMeasurementController::class, 'store']);
     Route::get('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'show']);
     Route::post('ews-device-measurement/{id}', [EwsDeviceMeasurementController::class, 'update']);
