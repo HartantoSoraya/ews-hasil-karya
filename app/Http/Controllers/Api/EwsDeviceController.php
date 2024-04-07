@@ -107,31 +107,4 @@ class EwsDeviceController extends Controller
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
-
-    public function chart(Request $request)
-    {
-        try {
-            $device = $this->EwsDeviceRepository->getEwsDeviceByDeviceCode($request->code);
-
-            $latestMeasurement = EwsDeviceMeasurement::where('ews_device_id', $device->id)
-                ->latest('created_at')
-                ->first();
-
-            if ($latestMeasurement) {
-                $chartData = [
-                    [
-                        'vibration_value' => $latestMeasurement->vibration_value,
-                        'db_value' => $latestMeasurement->db_value,
-                        'time' => $latestMeasurement->created_at->format('Y-m-d H:i:s'),
-                    ],
-                ];
-
-                return ResponseHelper::jsonResponse(true, 'Success', $chartData, 200);
-            } else {
-                return ResponseHelper::jsonResponse(true, 'No measurements found', [], 200);
-            }
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
-        }
-    }
 }
