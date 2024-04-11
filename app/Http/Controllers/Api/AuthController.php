@@ -105,7 +105,7 @@ class AuthController extends Controller
                 'data' => [
                     'id' => $user->id,
                     'client_id' => $user->client->id ?? '',
-                    'name' => $user->client->name ?? "Admin",
+                    'name' => $user->client->name ?? 'Admin',
                     'email' => $user->email,
                     'permissions' => $permissions,
                     'role' => $role,
@@ -117,5 +117,4 @@ class AuthController extends Controller
             'message' => 'You are not logged in',
         ], 401);
     }
-
 }
