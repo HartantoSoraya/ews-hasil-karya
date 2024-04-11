@@ -10,13 +10,15 @@ class AccountSeeder extends Seeder
 {
     public function run(): void
     {
+        $appname = config('app.name');
+
         User::create([
-            'email' => 'admin@admin.com',
+            'email' => 'admin@'.str_replace(' ', '', strtolower($appname)).'.co.id',
             'password' => bcrypt('password'),
         ])->assignRole(UserRoleEnum::DEV->value);
 
         User::create([
-            'email' => 'client@admin.com',
+            'email' => 'client@'.str_replace(' ', '', strtolower($appname)).'.co.id',
             'password' => bcrypt('password'),
         ])->assignRole(UserRoleEnum::CLIENT->value);
     }

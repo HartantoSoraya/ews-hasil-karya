@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Log;
 class EwsDeviceMeasurementController extends Controller
 {
     protected $EwsDeviceMeasurementRepository;
-    protected $EwsDeviceRepository;
 
+    protected $EwsDeviceRepository;
 
     public function __construct(EwsDeviceMeasurementRepositoryInterface $EwsDeviceMeasurementRepository, EwsDeviceRepositoryInterface $EwsDeviceRepository)
     {

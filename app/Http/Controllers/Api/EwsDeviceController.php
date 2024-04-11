@@ -8,7 +8,6 @@ use App\Http\Requests\StoreEwsDeviceRequest;
 use App\Http\Requests\UpdateEwsDeviceRequest;
 use App\Http\Resources\EwsDeviceResource;
 use App\Interfaces\EwsDeviceRepositoryInterface;
-use App\Models\EwsDeviceMeasurement;
 use Illuminate\Http\Request;
 
 class EwsDeviceController extends Controller
