@@ -16,10 +16,5 @@ class AccountSeeder extends Seeder
             'email' => 'admin@'.str_replace(' ', '', strtolower($appname)).'.co.id',
             'password' => bcrypt('password'),
         ])->assignRole(UserRoleEnum::DEV->value);
-
-        User::create([
-            'email' => 'client@'.str_replace(' ', '', strtolower($appname)).'.co.id',
-            'password' => bcrypt('password'),
-        ])->assignRole(UserRoleEnum::CLIENT->value);
     }
 }
