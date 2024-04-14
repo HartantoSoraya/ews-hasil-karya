@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\EwsDeviceRepositoryInterface;
 use App\Models\EwsDevice;
-use App\Models\EwsDeviceAddressHistory;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\EwsDeviceAddressHistory;
+use App\Interfaces\EwsDeviceRepositoryInterface;
 
 class EwsDeviceRepository implements EwsDeviceRepositoryInterface
 {
@@ -119,10 +120,9 @@ class EwsDeviceRepository implements EwsDeviceRepositoryInterface
         return $ewsDevice;
     }
 
-    public function generateCode(int $tryCount): string
+    public function generateCode(): string
     {
-        $count = EwsDevice::withTrashed()->count() + 1 + $tryCount;
-        $code = 'EWS'.str_pad($count, 3, '0', STR_PAD_LEFT);
+        $code = 'EWS'. Str::random(10);
 
         return $code;
     }

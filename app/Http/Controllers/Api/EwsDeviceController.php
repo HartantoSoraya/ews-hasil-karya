@@ -45,10 +45,8 @@ class EwsDeviceController extends Controller
 
         $code = $request['code'];
         if ($code == 'AUTO') {
-            $tryCount = 0;
             do {
-                $code = $this->EwsDeviceRepository->generateCode($tryCount);
-                $tryCount++;
+                $code = $this->EwsDeviceRepository->generateCode();
             } while (! $this->EwsDeviceRepository->isUniqueCode($code));
             $request['code'] = $code;
         }
@@ -79,10 +77,8 @@ class EwsDeviceController extends Controller
 
         $code = $request['code'];
         if ($code == 'AUTO') {
-            $tryCount = 0;
             do {
-                $code = $this->EwsDeviceRepository->generateCode($tryCount);
-                $tryCount++;
+                $code = $this->EwsDeviceRepository->generateCode();
             } while (! $this->EwsDeviceRepository->isUniqueCode($code, $id));
             $request['code'] = $code;
         }

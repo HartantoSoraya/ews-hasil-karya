@@ -32,11 +32,21 @@ class EwsDeviceMeasurementAPITest extends TestCase
             EwsDevice::factory()->withExpectedCode()->create();
         }
 
-        EwsDeviceMeasurement::factory()
-            ->for(EwsDevice::inRandomOrder()->first(), 'device')
-            ->count(5)->create();
+        $ewsDevice = EwsDevice::inRandomOrder()->first();
+        $startDate = now()->startOfMonth()->toDateString();
+        $endDate = now()->endOfMonth()->toDateString();
 
-        $response = $this->json('GET', '/api/v1/ews-device-measurements');
+        EwsDeviceMeasurement::factory()
+            ->for($ewsDevice, 'device')
+            ->count(100)->create(
+                ['created_at' => now()->startOfMonth()->addDays(rand(1, 15))->toDateTimeString()]
+            );
+
+        $response = $this->json('GET', '/api/v1/ews-device-measurements', [
+            'ews_device_id' => $ewsDevice->id,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
         $response->assertSuccessful();
     }

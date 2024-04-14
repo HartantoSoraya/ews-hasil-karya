@@ -28,14 +28,16 @@ class EwsDeviceMeasurementController extends Controller
     public function index(Request $request)
     {
         try {
-            $ews_device_id = $request->input('ews_device_id');
-            $start_date = $request->input('start_date');
-            $end_date = $request->input('end_date');
+            $request = $request->validate([
+                'ews_device_id' => 'required|exists:ews_devices,id',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+            ]);
 
             $ewsDeviceMeasurements = $this->EwsDeviceMeasurementRepository->getAllEwsDeviceMeasurements(
-                $ews_device_id,
-                $start_date,
-                $end_date
+                $request['ews_device_id'],
+                $request['start_date'],
+                $request['end_date']
             );
 
             return ResponseHelper::jsonResponse(true, 'Success', EwsDeviceMeasurementResource::collection($ewsDeviceMeasurements), 200);

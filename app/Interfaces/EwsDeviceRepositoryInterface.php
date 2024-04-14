@@ -16,7 +16,7 @@ interface EwsDeviceRepositoryInterface
 
     public function delete(string $id);
 
-    public function generateCode(int $tryCount): string;
+    public function generateCode(): string;
 
     public function isUniqueCode(string $code, $exceptId = null): bool;
 }
