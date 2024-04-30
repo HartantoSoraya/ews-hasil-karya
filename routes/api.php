@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EwsDeviceController;
 use App\Http\Controllers\Api\EwsDeviceMeasurementController;
+use App\Http\Controllers\Api\NotificationRecepientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('client/{id}', [ClientController::class, 'update']);
     Route::post('client/active/{id}', [ClientController::class, 'updateActiveStatus']);
     Route::delete('client/{id}', [ClientController::class, 'destroy']);
+
+    Route::get('notification-recepients', [NotificationRecepientController::class, 'index']);
+
+    Route::post('notification-recepient', [NotificationRecepientController::class, 'store']);
+    Route::get('notification-recepient/{id}', [NotificationRecepientController::class, 'show']);
+    Route::post('notification-recepient/{id}', [NotificationRecepientController::class, 'update']);
+    Route::post('notification-recepient/active/{id}', [NotificationRecepientController::class, 'updateActiveStatus']);
+    Route::delete('notification-recepient/{id}', [NotificationRecepientController::class, 'destroy']);
 });
 
 Route::get('ews-device-measurement', [EwsDeviceMeasurementController::class, 'store']);
