@@ -48,7 +48,7 @@ class NotificationRecepientAPITest extends TestCase
         // name
         $notificationRecepient = NotificationRecepient::factory()->make(['name' => null])->toArray();
 
-        $api = $this->json('POST', 'api/v1/blog-category', $notificationRecepient);
+        $api = $this->json('POST', 'api/v1/notification-recepient', $notificationRecepient);
 
         $api->assertStatus(422);
 
@@ -60,7 +60,7 @@ class NotificationRecepientAPITest extends TestCase
         // phone number
         $notificationRecepient = NotificationRecepient::factory()->make(['phone_number' => null])->toArray();
 
-        $api = $this->json('POST', 'api/v1/blog-category', $notificationRecepient);
+        $api = $this->json('POST', 'api/v1/notification-recepient', $notificationRecepient);
 
         $api->assertStatus(422);
 
@@ -72,7 +72,7 @@ class NotificationRecepientAPITest extends TestCase
         // job title
         $notificationRecepient = NotificationRecepient::factory()->make(['job_title' => null])->toArray();
 
-        $api = $this->json('POST', 'api/v1/blog-category', $notificationRecepient);
+        $api = $this->json('POST', 'api/v1/notification-recepient', $notificationRecepient);
 
         $api->assertStatus(422);
 
@@ -84,7 +84,7 @@ class NotificationRecepientAPITest extends TestCase
         // is active
         $notificationRecepient = NotificationRecepient::factory()->make(['is_active' => null])->toArray();
 
-        $api = $this->json('POST', 'api/v1/blog-category', $notificationRecepient);
+        $api = $this->json('POST', 'api/v1/notification-recepient', $notificationRecepient);
 
         $api->assertStatus(422);
 
